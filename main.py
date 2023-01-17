@@ -46,6 +46,7 @@ def get_combination() -> list:
         res = ''.join(combination)
         if check_sum_digits(int(res)):
             combinations.append(res)
+
     return combinations
 
 
