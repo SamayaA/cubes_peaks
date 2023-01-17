@@ -1,4 +1,4 @@
-from math import factorial
+from itertools import permutations
 
 def find_sum(numbers: list) -> int:
     # так как total_sum - это сумма всех вершин
@@ -15,9 +15,41 @@ def find_sum(numbers: list) -> int:
 
     return face_sum
 
-def count_combinations(length: int, amount_symbols: int) -> int:
-    count = factorial(amount_symbols) // ((factorial(amount_symbols - length) * factorial(length)))
-    return count
+def check_sum_digits(number: int) -> bool:
+    '''
+    Check if sum of digits equals 18
+    '''
+    peaks = []
+
+    # get peaks values
+    while (number > 0):
+        peaks.append(number % 10)
+        number = number // 10
+    # compute sums of all surfaces of cube
+    sums = []
+    sums.append(peaks[0] + peaks[1] + peaks[2] + peaks[3])
+    sums.append(peaks[0] + peaks[1] + peaks[4] + peaks[5])
+    sums.append(peaks[4] + peaks[5] + peaks[6] + peaks[7])
+    sums.append(peaks[6] + peaks[7] + peaks[2] + peaks[3])
+    sums.append(peaks[1] + peaks[2] + peaks[5] + peaks[6])
+    sums.append(peaks[0] + peaks[3] + peaks[4] + peaks[7])
+    result = all(sum == 18 for sum in sums)
+    
+    return result
+
+def get_combination() -> list:
+    '''
+    get all comiations with sum condition
+    '''
+    combinations = []
+    for combination in permutations('12345678'):
+        res = ''.join(combination)
+        if check_sum_digits(int(res)):
+            combinations.append(res)
+    return combinations
+
+
+
 
 if __name__ == '__main__':
     '''
@@ -30,9 +62,11 @@ if __name__ == '__main__':
     '''
     values = [i for i in range(1,9,1)]
     surface_sum = find_sum(values)
-    count = count_combinations(8, 8)
+    # exclude cube rotation 
+    count = len(get_combination()) // 6
 
     print(f'1. Чему равна сумма вершин каждой плоскости? {surface_sum}')
+
     print(f'2. Сколько вариантов расположения цифр может быть, если не принимать во внимание вращение кубика в пространстве? {count}')
 
     # верхняя грань 5 8 3 2
